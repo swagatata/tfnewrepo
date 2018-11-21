@@ -1,18 +1,12 @@
 # global/main.tf
 # same script 3 different envs
-
-variable "aws_credential_filepath" {
-  
-}
-
-variable "aws_profile" {
-  
-}
+variable "aws_access_key" {}
+variable "aws_secret_key" {}
 
 provider "aws" {
   region  = "us-east-1"
-  shared_credentials_file = "${var.aws_credential_filepath}"
-  profile = "${var.aws_profile}"
+  access_key = "${var.aws_access_key}"
+  secret_key = "${var.aws_secret_key}"
 }
 
 terraform {
@@ -23,16 +17,16 @@ terraform {
   }
 }
 
-# data "terraform_remote_state" "network" {
-#   backend = "s3"
-#   config {
-#     bucket = "personal-remote-state-dev"
-#     key    = "terraform.tfstate"
-#     region = "us-east-1"    
-#     access_key = "${var.aws_access_key}"
-#     secret_key = "${var.aws_secret_key}"
-#   }
-# }
+data "terraform_remote_state" "network" {
+  backend = "s3"
+  config {
+    bucket = "personal-remote-state-dev"
+    key    = "terraform.tfstate"
+    region = "us-east-1"    
+    access_key = "${var.aws_access_key}"
+    secret_key = "${var.aws_secret_key}"
+  }
+}
 
 variable "count" {}
 resource "aws_instance" "tf_instance" {
@@ -44,6 +38,6 @@ resource "aws_instance" "tf_instance" {
   }
 }
 
-# output "backend_config" {
-#   value = "${data.terraform_remote_state.network.config}"
-# }
+output "backend_config" {
+  value = "${data.terraform_remote_state.network.config}"
+}
