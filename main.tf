@@ -37,7 +37,3 @@ resource "aws_instance" "tf_instance" {
     Name = "tf_instance"
   }
 }
-
-output "backend_config" {
-  value = "${data.terraform_remote_state.network.config}"
-}
